@@ -13,6 +13,8 @@ setuptools.setup(
         'Skype4Py',
         'lxml',
         'tweepy',
+        'sqlalchemy',
+        'PyMySQL',
         ],
     author=pkg.__author__,
     license=pkg.__license__,

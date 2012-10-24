@@ -2,6 +2,9 @@
 
 
 class EnumElem(object):
+    u'''
+    列挙体の要素
+    '''
 
     def __init__(self, enum, name):
 
@@ -10,11 +13,17 @@ class EnumElem(object):
 
 
     def __eq__(self, other):
+        u'''
+        同値性
+        '''
 
         return self is other or self.enum is other.enum and self.name == other.name
 
 
     def __hash__(self):
+        u'''
+        set, dict で使えるように
+        '''
 
         return id(self.enum) + hash(self.name)
 
@@ -44,27 +53,36 @@ class Enum(object):
         self.__names = names
 
 
-
     def elements(self):
+        u'''
+        列挙体の中身をリスト
+        '''
 
         return list(self)
 
 
-
     def __iter__(self):
+        u'''
+        列挙体の中身をイテレート
+        '''
 
         for name in self.__names:
 
-            yield getattr(self, anem)
-
+            yield getattr(self, name)
 
 
     def __contains__(self, elem):
+        u'''
+        列挙体に含まれるかどうか
+        '''
 
         return elem in self.__objs
 
 
     def from_str(self, s):
+        u'''
+        文字列から列挙体の要素を取得
+        '''
 
         obj = EnumElem(self, s)
 
@@ -72,7 +90,6 @@ class Enum(object):
             return getattr(self, s)
 
         raise AttributeError(s + ' is not contains in enum object')
-
 
 
 

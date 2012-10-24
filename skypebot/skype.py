@@ -3,11 +3,7 @@
 import Skype4Py
 
 from skypebot import utils
-
-
-event = utils.Enum('RECEIVED')
-status = utils.Enum('CONTINUE', 'FINISH')
-
+from skypebot.constants import status, event
 
 
 class MessageEvent(object):
@@ -46,12 +42,24 @@ class MessageEvent(object):
         chat = self.skype.Chat(self.message.ChatName)
         sender = self.get_sender()
 
-        print sender.Handle, sender.DisplayName
-
-        fullmsg = '@{0} {1}'.format(sender.Handle, text)
+        fullmsg = '@{0} {1}'.format(sender.FullName, text)
 
         try:
             chat.SendMessage(fullmsg)
+        except:
+            import traceback
+            traceback.print_exc()
+
+
+    def send(self, text):
+        u'''
+        送る
+        '''
+
+        chat = self.skype.Chat(self.message.ChatName)
+
+        try:
+            chat.SendMessage(text)
         except:
             import traceback
             traceback.print_exc()
@@ -112,27 +120,15 @@ class Skype(object):
 
 
 
-def nullpo(evt):
-    u'''
-    ぬるぽに ｶﾞｯ する
-    '''
-
-    body = evt.get_body()
-
-    print body
-
-    if u'ぬるぽ' in body:
-        evt.reply('ｶﾞｯ')
-
-    return status.CONTINUE
-
-
-
 def init():
+
+    from . import handlers
 
     skp = Skype()
 
-    skp.register_message_handler(event.RECEIVED, nullpo)
+    skp.register_message_handler(event.RECEIVED, handlers.nullpo)
+    skp.register_message_handler(event.RECEIVED, handlers.ticket)
+    skp.register_message_handler(event.RECEIVED, handlers.revision)
 
     return skp
 
