@@ -42,7 +42,7 @@ class MessageEvent(object):
         chat = self.skype.Chat(self.message.ChatName)
         sender = self.get_sender()
 
-        fullmsg = '@{0} {1}'.format(sender.FullName, text)
+        fullmsg = u'@{0} {1}'.format(sender.FullName, text)
 
         try:
             chat.SendMessage(fullmsg)
@@ -122,13 +122,7 @@ class Skype(object):
 
 def init():
 
-    from . import handlers
-
     skp = Skype()
-
-    skp.register_message_handler(event.RECEIVED, handlers.nullpo)
-    skp.register_message_handler(event.RECEIVED, handlers.ticket)
-    skp.register_message_handler(event.RECEIVED, handlers.revision)
 
     return skp
 
