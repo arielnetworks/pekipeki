@@ -2,7 +2,7 @@
 
 import unittest
 
-from skypebot import utils
+from pekipeki import utils
 
 
 class TestUtils(unittest.TestCase):

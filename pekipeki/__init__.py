@@ -1,4 +1,5 @@
 #-*- coding:utf-8 -*-
+
 __import__('pkg_resources').declare_namespace(__name__)
 
 __version__ = '0.1.0'
@@ -25,12 +26,13 @@ def make_parser():
     return parser
 
 
+
 def main():
     u'''
     メイン
     '''
 
-    from skypebot import skype, handlers
+    from pekipeki import skype, handlers
 
     import socket
     socket.setdefaulttimeout(10)

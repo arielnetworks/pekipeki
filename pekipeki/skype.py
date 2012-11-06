@@ -2,8 +2,7 @@
 
 import Skype4Py
 
-from skypebot import utils
-from skypebot.constants import status, event
+from pekipeki import constants
 
 
 class MessageEvent(object):
@@ -77,7 +76,7 @@ class Skype(object):
         イベント処理
         '''
 
-        handlers = self.message_handlers.get(event.from_str(evt))
+        handlers = self.message_handlers.get(constants.event.from_str(evt))
 
         if not handlers:
             return
@@ -92,7 +91,7 @@ class Skype(object):
                 traceback.print_exc()
                 continue
 
-            if result == status.FINISH or not result:
+            if result == constants.status.FINISH or not result:
                 return
 
 
@@ -113,7 +112,7 @@ class Skype(object):
         イベントハンドラを追加
         '''
 
-        if ev not in event:
+        if ev not in constants.event:
             raise TypeError('{0} is not event object'.format(ev.name))
 
         self.message_handlers[ev] = self.message_handlers.get(ev, []) + [handler]

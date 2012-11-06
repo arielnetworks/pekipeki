@@ -3,8 +3,8 @@
 import re
 import urllib2
 
-from skypebot import utils, trac
-from skypebot.constants import status, event
+from pekipeki import trac
+from pekipeki.constants import status, event
 
 
 
@@ -19,6 +19,7 @@ def nullpo(evt):
         evt.reply(u'ｶﾞｯ')
 
     return status.CONTINUE
+
 
 
 def haisho(evt):
@@ -40,6 +41,7 @@ TICKET_BASE = 'http://legion.ariel-networks.com/agn/ticket/'
 
 REVISION_REGEX = re.compile(r'r(\d+)')
 REVISION_BASE = 'http://legion.ariel-networks.com/agn/changeset/'
+
 
 
 def pick_and_make_url(reg, mkmsg):
@@ -89,7 +91,7 @@ def register_handlers(skp, args):
 
 
     ticket = pick_and_make_url(TICKET_REGEX, make_ticket_summary)
-    revision = pick_and_make_url(REVISION_REGEX, lambda x:REVISION_BASE + x)
+    revision = pick_and_make_url(REVISION_REGEX, lambda x: REVISION_BASE + x)
 
     skp.register_message_handler(event.RECEIVED, nullpo)
     skp.register_message_handler(event.RECEIVED, ticket)

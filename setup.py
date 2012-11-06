@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 
 import setuptools
-import skypebot as pkg
+import pekipeki as pkg
 
 pkgname = pkg.__name__
 
