@@ -25,8 +25,8 @@ PEKIPEKI is a bouldering gym in Shibuya.
 拡張方法
 ========
 
-- pekppeki/handlers 以下に .py を置いておくと勝手に読み込む
+- pekipeki/handlers 以下に .py を置いておくと勝手に読み込む
 - 読み込んだモジュールに `register_handlers(skp, args)` 関数があるとそれを呼ぶ
 
-  - pekppeki/handlers/misc.py でも見てください
+  - pekipeki/handlers/misc.py でも見てください
 
