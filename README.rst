@@ -1,6 +1,8 @@
-===========
- Skype Bot
-===========
+==========
+ PEKIPEKI
+==========
+
+PEKIPEKI is a bouldering gym in Shibuya.
 
 必要なもの
 ==========
