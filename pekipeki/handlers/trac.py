@@ -8,34 +8,6 @@ from pekipeki.constants import status, event
 
 
 
-def nullpo(evt):
-    u'''
-    ぬるぽに ｶﾞｯ する
-    '''
-
-    body = evt.get_body()
-
-    if u'ぬるぽ' in body:
-        evt.reply(u'ｶﾞｯ')
-
-    return status.CONTINUE
-
-
-
-def haisho(evt):
-    u'''
-    拝承
-    '''
-
-    body = evt.get_body()
-
-    if body.endswith(u'たく'):
-        evt.reply(u'拝承')
-
-    return status.CONTINUE
-
-
-
 TICKET_REGEX = re.compile(r'#(\d+)')
 
 REVISION_REGEX = re.compile(r'r(\d+)')
@@ -65,10 +37,13 @@ def pick_and_make_url(reg, mkmsg):
 
 
 
-def register_trac_handlers(skp, args):
+def register_handlers(skp, args):
     u'''
-    trac 用
+    trac 用ハンドラ登録
     '''
+
+    if args.trac_url is None:
+        return
 
     tr = trac.Trac(args.trac_url,
                    args.trac_realm,
@@ -95,17 +70,4 @@ def register_trac_handlers(skp, args):
 
     skp.register_message_handler(event.RECEIVED, ticket)
     skp.register_message_handler(event.RECEIVED, revision)
-
-
-
-def register_handlers(skp, args):
-    u'''
-    ハンドラ登録
-    '''
-
-    skp.register_message_handler(event.RECEIVED, nullpo)
-    skp.register_message_handler(event.RECEIVED, haisho)
-
-    if args.trac_url is not None:
-        register_trac_handlers(skp, args)
 

@@ -51,7 +51,7 @@ class Trac(object):
 
     def __init__(self, root, realm, user, password):
 
-        self.root = root
+        self.root = root.rstrip('/')
         self.user = user
         self.password = password
 

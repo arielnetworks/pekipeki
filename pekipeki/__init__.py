@@ -27,12 +27,35 @@ def make_parser():
 
 
 
+def register_handlers(skp, args):
+    u'''
+    ハンドラを登録する
+    '''
+
+    from pekipeki import handlers, utils
+
+    for mod in utils.list_package_modules(handlers):
+
+        if not hasattr(mod, 'register_handlers'):
+            sys.stderr('skip {0}'.format(mod.__name__))
+
+        try:
+            mod.register_handlers(skp, args)
+            print 'register handler plugin:', mod.__name__
+        except KeyboardInterrupt:
+            raise
+        except:
+            import traceback
+            traceback.print_exc()
+
+
+
 def main():
     u'''
     メイン
     '''
 
-    from pekipeki import skype, handlers
+    from pekipeki import skype
 
     import socket
     socket.setdefaulttimeout(10)
@@ -42,7 +65,7 @@ def main():
 
     skp = skype.init()
 
-    handlers.register_handlers(skp, args)
+    register_handlers(skp, args)
 
     print 'start skyep bot'
 

@@ -1,5 +1,9 @@
 #-*- coding:utf-8 -*-
 
+import os
+import glob
+import traceback
+
 
 class EnumElem(object):
     u'''
@@ -91,5 +95,39 @@ class Enum(object):
 
         raise AttributeError(s + ' is not contains in enum object')
 
+
+
+def list_package_modules(pkg):
+    u'''
+    パッケージからパッケージ内のモジュールをロードして返す generator
+    '''
+
+    name = pkg.__name__
+
+
+    def load_module(modname):
+
+        mod = __import__(modname)
+
+        sp = modname.split('.')
+
+        return reduce(lambda x, y: getattr(x, y), sp[1:], mod)
+
+
+    for path in pkg.__path__:
+
+        files = glob.glob(os.path.join(path, '*.py'))
+        files = (x for x in map(os.path.basename, files) if x != '__init__.py')
+
+        for f in files:
+
+            modname = '{0}.{1}'.format(name, os.path.splitext(f)[0])
+
+            try:
+                mod = load_module(modname)
+            except ImportError:
+                traceback.print_exc()
+
+            yield mod
 
 
