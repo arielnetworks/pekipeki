@@ -67,7 +67,9 @@ class Trac(object):
         チケット番号から情報を取得
         '''
 
-        ticket_url = '{0}/ticket/{1}?format=csv'.format(self.root, no)
+        ticket_base = self.get_ticket_url(no)
+
+        ticket_url = ticket_base + '?format=csv'
 
         data = self.opener.open(ticket_url)
 
@@ -78,4 +80,26 @@ class Trac(object):
         value = iter(reader).next()
 
         return dict((k, v.decode(encode)) for k, v in value.iteritems())
+
+
+
+    def get_ticket_url(self, no):
+        u'''
+        チケット番号から URL 生成
+        '''
+
+        ticket_url = '{0}/ticket/{1}'.format(self.root, no)
+
+        return ticket_url
+
+
+    def get_revision_url(self, no):
+        u'''
+        リビジョン番号から URL 生成
+        '''
+
+        revision_url = '{0}/changeset/{1}'.format(self.root, no)
+
+        return revision_url
+
 

@@ -37,11 +37,8 @@ def haisho(evt):
 
 
 TICKET_REGEX = re.compile(r'#(\d+)')
-TICKET_BASE = 'http://legion.ariel-networks.com/agn/ticket/'
 
 REVISION_REGEX = re.compile(r'r(\d+)')
-REVISION_BASE = 'http://legion.ariel-networks.com/agn/changeset/'
-
 
 
 def pick_and_make_url(reg, mkmsg):
@@ -68,7 +65,10 @@ def pick_and_make_url(reg, mkmsg):
 
 
 
-def register_handlers(skp, args):
+def register_trac_handlers(skp, args):
+    u'''
+    trac 用
+    '''
 
     tr = trac.Trac(args.trac_url,
                    args.trac_realm,
@@ -80,7 +80,7 @@ def register_handlers(skp, args):
         trac のサマリを吐く
         '''
 
-        url = TICKET_BASE + x
+        url = tr.get_ticket_url(x)
 
         try:
             ticket = tr.get_ticket(x)
@@ -91,10 +91,18 @@ def register_handlers(skp, args):
 
 
     ticket = pick_and_make_url(TICKET_REGEX, make_ticket_summary)
-    revision = pick_and_make_url(REVISION_REGEX, lambda x: REVISION_BASE + x)
+    revision = pick_and_make_url(REVISION_REGEX, tr.get_revision_url)
 
-    skp.register_message_handler(event.RECEIVED, nullpo)
     skp.register_message_handler(event.RECEIVED, ticket)
     skp.register_message_handler(event.RECEIVED, revision)
+
+
+
+def register_handlers(skp, args):
+    u'''
+    ハンドラ登録
+    '''
+
+    skp.register_message_handler(event.RECEIVED, nullpo)
     skp.register_message_handler(event.RECEIVED, haisho)
 

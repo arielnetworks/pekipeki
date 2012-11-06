@@ -3,6 +3,6 @@
 from . import utils
 
 
-event = utils.Enum('RECEIVED', 'SENT', 'SENDING')
+event = utils.Enum('READ', 'RECEIVED', 'SENDING', 'SENT')
 status = utils.Enum('CONTINUE', 'FINISH')
 
