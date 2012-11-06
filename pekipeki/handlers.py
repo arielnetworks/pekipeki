@@ -106,5 +106,6 @@ def register_handlers(skp, args):
     skp.register_message_handler(event.RECEIVED, nullpo)
     skp.register_message_handler(event.RECEIVED, haisho)
 
-    register_trac_handlers(skp, args)
+    if args.trac_url is not None:
+        register_trac_handlers(skp, args)
 
