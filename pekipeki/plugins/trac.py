@@ -36,19 +36,26 @@ def pick_and_make_url(reg, mkmsg):
     return replace
 
 
+def init_config(conf_addr):
 
-def register_handlers(skp, args):
+    keys = ['url', 'realm', 'user', 'password']
+
+    conf_addr(keys, {})
+
+
+
+def register_handlers(skp, conf):
     u'''
     trac 用ハンドラ登録
     '''
 
-    if args.trac_url is None:
+    if conf.url is None:
         return
 
-    tr = trac.Trac(args.trac_url,
-                   args.trac_realm,
-                   args.trac_user,
-                   args.trac_password)
+    tr = trac.Trac(conf.url,
+                   conf.realm,
+                   conf.user,
+                   conf.password)
 
     def make_ticket_summary(x):
         u'''
