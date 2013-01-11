@@ -79,7 +79,7 @@ def init_config():
 
 
 
-def register_handlers(skp, conf):
+def init_skype(skp, conf):
     u'''
     ハンドラを登録する
     '''
@@ -88,13 +88,14 @@ def register_handlers(skp, conf):
 
     for mod in utils.list_package_modules(plugins):
 
-        if not hasattr(mod, 'register_handlers'):
-            sys.stderr('skip {0}'.format(mod.__name__))
+        if not hasattr(mod, 'init_skype'):
+            sys.stderr.write('skip {0}'.format(mod.__name__))
+            continue
 
         sec = conf.get_section(get_name(mod))
 
         try:
-            mod.register_handlers(skp, sec)
+            mod.init_skype(skp, sec)
             print 'register handler plugin:', mod.__name__
         except KeyboardInterrupt:
             raise
@@ -127,7 +128,7 @@ def main():
 
     skp = skype.init()
 
-    register_handlers(skp, conf)
+    init_skype(skp, conf)
 
     print 'start skyep bot'
 

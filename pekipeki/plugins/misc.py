@@ -32,7 +32,7 @@ def haisho(evt):
 
 
 
-def register_handlers(skp, args):
+def init_skype(skp, args):
     u'''
     ハンドラ登録
     '''

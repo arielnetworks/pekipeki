@@ -77,7 +77,7 @@ class Trac(object):
 
         reader = csv.DictReader(data)
 
-        value = iter(reader).next()
+        value = reader.next()
 
         return dict((k, v.decode(encode)) for k, v in value.iteritems())
 
