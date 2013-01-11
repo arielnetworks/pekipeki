@@ -8,7 +8,6 @@ __license__ = 'LGPL'
 
 import sys
 import time
-import argparse
 
 from . import config
 
@@ -18,6 +17,7 @@ def make_parser():
     u'''
     パーサ作る
     '''
+    import argparse
 
     parser = argparse.ArgumentParser(description=u'skype bot ってやつ')
     parser.add_argument('--config-file', '-f', dest='config_file')
