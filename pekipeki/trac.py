@@ -54,12 +54,16 @@ class Trac(object):
         self.root = root.rstrip('/')
         self.user = user
         self.password = password
+        self.realm = realm
+
+
+    def make_opener(self):
 
         mgr = urllib2.HTTPPasswordMgr()
-        mgr.add_password(realm, _get_url(root), user, password)
+        mgr.add_password(self.realm, _get_url(self.root), self.user, self.password)
         handler = urllib2.HTTPBasicAuthHandler(mgr)
 
-        self.opener = urllib2.build_opener(handler)
+        return urllib2.build_opener(handler)
 
 
     def get_ticket(self, no):
@@ -71,7 +75,9 @@ class Trac(object):
 
         ticket_url = ticket_base + '?format=csv'
 
-        data = self.opener.open(ticket_url)
+        opener = self.make_opener()
+
+        data = opener.open(ticket_url)
 
         encode = _get_content_encode(data)
 
