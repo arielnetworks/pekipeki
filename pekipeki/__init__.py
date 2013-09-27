@@ -10,8 +10,6 @@ import sys
 import time
 import argparse
 
-from . import config
-
 
 
 def make_parser():
@@ -60,6 +58,7 @@ def init_config():
     コンフィグのセクション情報を追加する
     '''
 
+    from . import config
     conf = config.ConfigSetting()
 
     for mod in load_plugins():
@@ -108,7 +107,7 @@ def main():
     u'''
     メイン
     '''
-
+    from . import config
     from pekipeki import skype
 
     import socket
