@@ -5,6 +5,30 @@ import Skype4Py
 from pekipeki import constants
 
 
+
+class Sender(object):
+
+    def __init__(self, sender):
+
+        self.sender = sender
+
+
+    def get_fullname(self):
+
+        return self.sender.FullName
+
+
+    def get_user_id(self):
+
+        return self.sender.Handle
+
+
+    def get_display_name(self):
+
+        return self.sender.DisplayName
+
+
+
 class MessageEvent(object):
     u'''
     Skype4Py のイベントオブジェクトが使いにくいので使いやすいように
@@ -15,6 +39,14 @@ class MessageEvent(object):
         self.skype = skype
         self.event = event
         self.message = msg
+
+
+    def get_id(self):
+        u'''
+        メッセージ ID
+        '''
+
+        return self.message.Id
 
 
     def get_body(self):
@@ -30,7 +62,7 @@ class MessageEvent(object):
         送信者
         '''
 
-        return self.message.Sender
+        return Sender(self.message.Sender)
 
 
     def reply(self, text):
@@ -41,7 +73,7 @@ class MessageEvent(object):
         chat = self.skype.Chat(self.message.ChatName)
         sender = self.get_sender()
 
-        fullmsg = u'@{0} {1}'.format(sender.FullName, text)
+        fullmsg = u'@{0} {1}'.format(sender.get_fullname(), text)
 
         try:
             chat.SendMessage(fullmsg)
@@ -62,6 +94,22 @@ class MessageEvent(object):
         except:
             import traceback
             traceback.print_exc()
+
+
+    def get_chat_name(self):
+        u'''
+        部屋の名前
+        '''
+
+        return self.message.ChatName
+
+
+    def get_datetime(self):
+        u'''
+        送信日時
+        '''
+
+        return self.message.Datetime
 
 
 
@@ -91,7 +139,10 @@ class Skype(object):
                 traceback.print_exc()
                 continue
 
-            if result == constants.status.FINISH or not result:
+            if result is None:
+                continue
+
+            if result == constants.status.FINISH:
                 return
 
 
