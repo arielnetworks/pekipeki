@@ -44,18 +44,18 @@ def init_config(conf_addr):
 
 
 
-def register_handlers(skp, conf):
+def init_skype(skp, conf):
     u'''
     trac 用ハンドラ登録
     '''
 
-    if conf.url is None:
+    if conf.get('url') is None:
         return
 
-    tr = trac.Trac(conf.url,
-                   conf.realm,
-                   conf.user,
-                   conf.password)
+    tr = trac.Trac(conf.get('url'),
+                   conf.get('realm'),
+                   conf.get('user'),
+                   conf.get('password'))
 
     def make_ticket_summary(x):
         u'''

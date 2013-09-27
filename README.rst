@@ -18,7 +18,7 @@ PEKIPEKI is a bouldering gym in Shibuya.
 
 - python bootstrap.py -d
 
-  - bootstrap.py は http://svn.zope.org/*checkout*/zc.buildout/trunk/bootstrap/bootstrap.py
+  - bootstrap.py は http://downloads.buildout.org/1/bootstrap.py
 
 - bin/buildout
 - bin/skypebot --config-file=config.ini
