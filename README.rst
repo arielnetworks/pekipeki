@@ -70,12 +70,16 @@ log
 
 設定
 ~~~~
-こんなかんじ
+こんなかんじ。
+
+db_uri は sqlalchemy に食わせる URI。
+echo は実行した SQL を表示するかどうか。
 
 .. code-block:: ini
 
    [log]
    db_uri = sqlite:///skype_log.db
+   echo = True
 
 
 機能
