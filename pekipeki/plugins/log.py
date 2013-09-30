@@ -30,6 +30,11 @@ class DBLogger(object):
         msg = evt.get_body()
         sender = evt.get_sender()
 
+        disp = sender.get_fullname()
+
+        msg = disp + u': ' + msg
+
+
         add_log(evt.get_id(),
                 sender.get_user_id(),
                 msg,
@@ -40,8 +45,6 @@ class DBLogger(object):
 
 @session.without_transaction
 def search(sess, skype, event, args):
-
-    print 'aaaaaaaaa'
 
     if len(args) < 1:
         event.reply('''Usage: $search ${username}''')
@@ -66,7 +69,7 @@ def search(sess, skype, event, args):
         user = result.get('user')
         msg = result.get('message')
 
-        print >> fp, ' ', '[%s] %s: %s' % (date.strftime('%Y/%m/%d %H:%M:%S'), user, msg)
+        print >> fp, ' ', '[%s] %s' % (date.strftime('%Y/%m/%d %H:%M:%S'), msg)
 
     event.send(fp.getvalue())
 
