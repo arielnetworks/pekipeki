@@ -1,9 +1,15 @@
 #-*- coding:utf-8 -*-
 
+import re
+import shlex
+
 import Skype4Py
 
 from pekipeki import constants
+from . import command
 
+
+CMD_REG = re.compile(r'\$[^ ]+')
 
 
 class Sender(object):
@@ -119,21 +125,42 @@ class Skype(object):
     '''
 
 
+    def __init__(self):
+
+        self.message_handlers = {}
+
+        self.skype = Skype4Py.Skype(Transport='x11')
+        self.skype.Attach()
+
+        self.skype.OnMessageStatus = self.on_message
+
+        self.command_dispatcher = command.CommandDispatcher()
+
+
     def on_message(self, msg, evt):
         u'''
         イベント処理
         '''
 
-        handlers = self.message_handlers.get(constants.event.from_str(evt))
+        event = constants.event.from_str(evt)
+
+        e = MessageEvent(self.skype, evt, msg)
+
+        self.proc_handlers(event, e)
+        self.proc_command_handlers(event, e)
+
+
+    def proc_handlers(self, event, message):
+
+        handlers = self.message_handlers.get(event)
 
         if not handlers:
             return
 
         for handler in handlers:
-            e = MessageEvent(self.skype, evt, msg)
 
             try:
-                result = handler(e)
+                result = handler(message)
             except:
                 import traceback
                 traceback.print_exc()
@@ -143,18 +170,30 @@ class Skype(object):
                 continue
 
             if result == constants.status.FINISH:
-                return
+                break
+
+
+    def proc_command_handlers(self, event, message):
+
+        body = message.get_body()
+
+        if CMD_REG.match(body):
+            args = self.parse_args(body)
+            cmd = args[0]
+            args = args[1:]
+            self.command_dispatcher.dispatch_command(self, message, event, cmd, args)
 
 
 
-    def __init__(self):
+    def parse_args(self, body):
 
-        self.message_handlers = {}
+        msgs = body.lstrip('$')
 
-        self.skype = Skype4Py.Skype(Transport='x11')
-        self.skype.Attach()
+        msgs = msgs.encode('utf-8')
 
-        self.skype.OnMessageStatus = self.on_message
+        args = [x.decode('utf-8') for x in shlex.split(msgs)]
+
+        return args
 
 
 
@@ -167,6 +206,11 @@ class Skype(object):
             raise TypeError('{0} is not event object'.format(ev.name))
 
         self.message_handlers[ev] = self.message_handlers.get(ev, []) + [handler]
+
+
+    def register_command_handler(self, ev, command, handler):
+
+        self.command_dispatcher.register_command(ev, command, handler)
 
 
 
