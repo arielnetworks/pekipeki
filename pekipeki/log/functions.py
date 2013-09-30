@@ -7,12 +7,13 @@ from sqlalchemy import sql
 
 
 
-def search(sess, name, chat, page=0, count=20):
+def search(sess, word, chat, page=0, count=20):
 
     t = tables.Log.__table__
 
-    where = sql.and_(t.c.user == name,
-                     t.c.chat == chat)
+    where = sql.and_(t.c.chat == chat,
+                     sql.or_(t.c.user.like(u'%'+word+u'%'),
+                             t.c.message.like(u'%'+word+u'%')))
 
     query = sql.select([t.c.user, t.c.message, t.c.time],
                        where,
