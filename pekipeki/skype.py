@@ -35,6 +35,17 @@ class Sender(object):
 
 
 
+class Chat(object):
+
+    def __init__(self, chat):
+        self.chat = chat
+
+
+    def send_message(self, msg):
+
+        self.chat.SendMessage(msg)
+
+
 class MessageEvent(object):
     u'''
     Skype4Py のイベントオブジェクトが使いにくいので使いやすいように
@@ -211,6 +222,12 @@ class Skype(object):
     def register_command_handler(self, ev, command, handler):
 
         self.command_dispatcher.register_command(ev, command, handler)
+
+
+    def get_chat(self, name):
+
+        return Chat(self.skype.Chat(name))
+
 
 
 
