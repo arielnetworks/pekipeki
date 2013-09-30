@@ -63,6 +63,56 @@ trac
 みたいな。
 
 
+log
+---
+
+ログとって検索します。
+
+設定
+~~~~
+こんなかんじ
+
+.. code-block:: ini
+
+   [log]
+   db_uri = sqlite:///skype_log.db
+
+
+機能
+~~~~
+``$search 文字列`` で検索
+
+
+jenkins
+-------
+
+jenkins のビルドがこけたら通知します。
+
+設定
+~~~~
+
+こんな感じ。
+
+targets は改行区切りで ${jenkinsのジョブURL}, ${skypeの部屋名} を書いていく。
+
+interval はチェック間隔(秒)
+
+
+.. code-block:: ini
+
+   [jenkins]
+   targets =
+        http://path.to.jenkins/job/name/, #skype/chat/name
+        http://path.to.jenkins/job2/name/, #skype/chat2/name
+   interval = 600
+
+
+機能
+~~~~
+
+こけたら書きこまれます
+
+
 misc
 ----
 
