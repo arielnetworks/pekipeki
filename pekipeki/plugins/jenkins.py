@@ -15,7 +15,7 @@ import sched
 
 from pekipeki import utils
 
-STATUS = utils.Enum('SUCCESS', 'FAILURE', 'UNSTABLE')
+STATUS = utils.Enum('SUCCESS', 'FAILURE', 'UNSTABLE', 'ABORTED')
 THREAD = None
 
 
@@ -48,7 +48,6 @@ def get_json(url):
 def get_last_status(builds):
 
     for build in builds:
-        print 'aaaaaaa'
         url = build['url']
         data = get_json(url)
 
@@ -72,15 +71,24 @@ def check(skp, url, chat, context):
     build = get_last_status(builds)
 
     lastnum = context.get('last_build')
+    laststatus = context.get('last_status')
 
-    curnum = build['number']
+    curnum = build.get('number')
+    curstatus = build.get('result')
 
-    if build.get('result') is not None and \
-            build['result'] != 'SUCCESS' and lastnum != curnum:
+    if curstatus is not None and \
+            curstatus != STATUS.SUCCESS and lastnum != curnum:
         c = skp.get_chat(chat)
         c.send_message('%s build %s: %s' % (name, build['result'].lower(), url))
 
+    if curstatus == STATUS.SUCCESS and \
+            laststatus is not None and \
+            laststatus != STATUS.SUCCESS:
+        c = skp.get_chat(chat)
+        c.send_message('%s build fixed: %s' % (name, url))
+
     context['last_build'] = curnum
+    context['last_status'] = curstatus
 
 
 
