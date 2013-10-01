@@ -107,7 +107,7 @@ def check(skp, url, chat, context):
 %s
 ''' % (name, curstatus.lower(), buildurl, msg))
 
-    if STATUS.SUCCESS != curstatus and \
+    if STATUS.SUCCESS == curstatus and \
             laststatus is not None and \
             STATUS.SUCCESS != laststatus and \
             lastnum != curnum:
