@@ -13,6 +13,9 @@ except:
 import sched
 
 
+from pekipeki import utils
+
+STATUS = utils.Enum('SUCCESS', 'FAILURE', 'UNSTABLE')
 THREAD = None
 
 
@@ -42,6 +45,23 @@ def get_json(url):
 
 
 
+def get_last_status(builds):
+
+    for build in builds:
+        print 'aaaaaaa'
+        url = build['url']
+        data = get_json(url)
+
+        if data['result'] is None:
+            continue
+
+        data['number'] = build['number']
+
+        return data
+
+    return dict(result=None, number=None)
+
+
 def check(skp, url, chat, context):
 
     data = get_json(url)
@@ -49,17 +69,16 @@ def check(skp, url, chat, context):
     builds = data.get('builds')
     name = data.get('name')
 
-    burl = builds[0]['url']
-    build = get_json(burl)
+    build = get_last_status(builds)
 
     lastnum = context.get('last_build')
-    laststatus = context.get('last_status')
 
-    curnum = builds[0]['number']
+    curnum = build['number']
 
-    if build['result'] != 'SUCCESS' and lastnum != curnum:
+    if build.get('result') is not None and \
+            build['result'] != 'SUCCESS' and lastnum != curnum:
         c = skp.get_chat(chat)
-        c.send_message('%s build failed: %s' % (name, burl))
+        c.send_message('%s build %s: %s' % (name, build['result'].lower(), url))
 
     context['last_build'] = curnum
 

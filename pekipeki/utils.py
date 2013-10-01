@@ -21,6 +21,12 @@ class EnumElem(object):
         同値性
         '''
 
+        if isinstance(other, basestring):
+            return self.name == other
+
+        if not isinstance(other, EnumElem):
+            return False
+
         return self is other or self.enum is other.enum and self.name == other.name
 
 
