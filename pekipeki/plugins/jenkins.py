@@ -58,7 +58,28 @@ def get_last_status(builds):
 
         return data
 
-    return dict(result=None, number=None)
+    return dict(result=None, number=None, changeSet=[])
+
+
+
+def make_changeset_description(changesets):
+
+    result = []
+
+    for item in changesets['items']:
+        author = item['user']
+        revision = item['commitId']
+        message = item['msg']
+
+        result.append(u'''\
+---- Revision: r%s ----
+Author: %s
+Description:
+%s
+''' % (revision, author, message))
+
+    return u'\n'.join(result)
+
 
 
 def check(skp, url, chat, context):
@@ -77,18 +98,21 @@ def check(skp, url, chat, context):
     curstatus = build.get('result')
 
     if curstatus is not None and \
-            laststatus is not None and \
             STATUS.SUCCESS != curstatus and \
             lastnum != curnum:
         c = skp.get_chat(chat)
-        c.send_message('%s build %s: %s' % (name, curstatus, url))
+        buildurl = build['url']
+        msg = make_changeset_description(build['changeSet'])
+        c.send_message(u'''%s build %s: %s
+%s
+''' % (name, curstatus.lower(), buildurl, msg))
 
     if STATUS.SUCCESS != curstatus and \
             laststatus is not None and \
             STATUS.SUCCESS != laststatus and \
             lastnum != curnum:
         c = skp.get_chat(chat)
-        c.send_message('%s build fixed: %s' % (name, url))
+        c.send_message(u'%s build fixed: %s' % (name, url))
 
     context['last_build'] = curnum
     context['last_status'] = curstatus
