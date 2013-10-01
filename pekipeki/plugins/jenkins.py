@@ -83,7 +83,8 @@ def check(skp, url, chat, context):
 
     if curstatus == STATUS.SUCCESS and \
             laststatus is not None and \
-            laststatus != STATUS.SUCCESS:
+            laststatus != STATUS.SUCCESS and \
+            lastnum != curnum:
         c = skp.get_chat(chat)
         c.send_message('%s build fixed: %s' % (name, url))
 
