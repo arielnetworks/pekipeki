@@ -30,6 +30,11 @@ class EnumElem(object):
         return self is other or self.enum is other.enum and self.name == other.name
 
 
+    def __ne__(self, other):
+
+        return not (self == other)
+
+
     def __hash__(self):
         u'''
         set, dict で使えるように

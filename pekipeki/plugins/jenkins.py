@@ -77,13 +77,15 @@ def check(skp, url, chat, context):
     curstatus = build.get('result')
 
     if curstatus is not None and \
-            curstatus != STATUS.SUCCESS and lastnum != curnum:
-        c = skp.get_chat(chat)
-        c.send_message('%s build %s: %s' % (name, build['result'].lower(), url))
-
-    if curstatus == STATUS.SUCCESS and \
             laststatus is not None and \
-            laststatus != STATUS.SUCCESS and \
+            STATUS.SUCCESS != curstatus and \
+            lastnum != curnum:
+        c = skp.get_chat(chat)
+        c.send_message('%s build %s: %s' % (name, curstatus, url))
+
+    if STATUS.SUCCESS != curstatus and \
+            laststatus is not None and \
+            STATUS.SUCCESS != laststatus and \
             lastnum != curnum:
         c = skp.get_chat(chat)
         c.send_message('%s build fixed: %s' % (name, url))
