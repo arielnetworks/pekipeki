@@ -4,7 +4,7 @@ from pekipeki.constants import status, event
 
 
 
-def nullpo(evt):
+def nullpo(skype, evt):
     u'''
     ぬるぽに ｶﾞｯ する
     '''
@@ -18,7 +18,7 @@ def nullpo(evt):
 
 
 
-def haisho(evt):
+def haisho(skype, evt):
     u'''
     拝承
     '''

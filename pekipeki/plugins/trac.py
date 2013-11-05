@@ -18,7 +18,7 @@ def pick_and_make_url(reg, mkmsg):
     抜き出して URL 吐き出す
     '''
 
-    def replace(evt):
+    def replace(skype, evt):
         u'''
         特定の形式をなんとかする
         '''

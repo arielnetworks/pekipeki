@@ -9,7 +9,7 @@ from pekipeki.log import functions
 
 
 @session.with_transaction
-def add_log(sess, id, user, message, chat, date):
+def _add_log(sess, id, user, message, chat, date):
     tables.create_log(sess,
                       id=id,
                       user=user,
@@ -18,28 +18,22 @@ def add_log(sess, id, user, message, chat, date):
                       time=date)
 
 
-class DBLogger(object):
 
-    def __init__(self, skype):
+def add_log(skype, evt):
 
-        self.skype = skype
+    msg = evt.get_body()
+    sender = evt.get_sender()
 
+    disp = sender.get_fullname()
 
-    def add_log(self, evt):
-
-        msg = evt.get_body()
-        sender = evt.get_sender()
-
-        disp = sender.get_fullname()
-
-        msg = disp + u': ' + msg
+    msg = disp + u': ' + msg
 
 
-        add_log(evt.get_id(),
-                sender.get_user_id(),
-                msg,
-                evt.get_chat_name(),
-                evt.get_datetime())
+    _add_log(evt.get_id(),
+             sender.get_user_id(),
+             msg,
+             evt.get_chat_name(),
+             evt.get_datetime())
 
 
 
@@ -91,9 +85,8 @@ def init_skype(skp, conf):
 
     session.initialize(conf)
 
-    logger = DBLogger(skp)
 
-    skp.register_message_handler(event.RECEIVED, logger.add_log)
+    skp.register_message_handler(event.RECEIVED, add_log)
 
     skp.register_command_handler(event.RECEIVED, 'search', search)
     skp.register_command_handler(event.SENT, 'search', search)

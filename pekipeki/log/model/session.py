@@ -28,6 +28,11 @@ class Session():
         self.session.close()
 
 
+    def __getattr__(self, name):
+
+        return getattr(self.session, name)
+
+
 
 
 def with_transaction(f):

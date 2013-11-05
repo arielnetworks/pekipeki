@@ -25,6 +25,18 @@ class Log(Base):
 
 
 
+class UserScore(Base):
+    u'''
+    ユーザの評価を記録する
+    '''
+
+    __tablename__ = 'userscores'
+
+    name = al.Column(al.Unicode(255), primary_key=True)
+    score = al.Column(al.Integer, nullable=False)
+
+
+
 def _create_maker(cls):
     u'''
     作るための関数を作る

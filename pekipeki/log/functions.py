@@ -29,3 +29,23 @@ def search(sess, word, chat, page=0, count=20):
 
 
 
+def increment_score(sess, name):
+
+    score = sess.query(tables.UserScore).filter_by(name=name).first()
+
+    if score is None:
+        user = tables.UserScore(name=name, score=1)
+        sess.add(user)
+        return 1
+    else:
+        score.score += 1
+        return score.score
+
+
+
+
+
+
+
+
+

@@ -171,7 +171,7 @@ class Skype(object):
         for handler in handlers:
 
             try:
-                result = handler(message)
+                result = handler(self, message)
             except:
                 import traceback
                 traceback.print_exc()
