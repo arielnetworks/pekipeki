@@ -35,7 +35,7 @@ def score_increment(skype, evt):
 
     body = evt.get_body()
 
-    name, op = find_name(body)
+    name, op = find_increment(body)
 
     if name is None:
         return
