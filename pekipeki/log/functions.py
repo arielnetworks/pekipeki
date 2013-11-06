@@ -29,16 +29,16 @@ def search(sess, word, chat, page=0, count=20):
 
 
 
-def increment_score(sess, name):
+def update_score(sess, name, d):
 
     score = sess.query(tables.UserScore).filter_by(name=name).first()
 
     if score is None:
-        user = tables.UserScore(name=name, score=1)
+        user = tables.UserScore(name=name, score=d)
         sess.add(user)
-        return 1
+        return d
     else:
-        score.score += 1
+        score.score += d
         return score.score
 
 

@@ -3,12 +3,19 @@
 import sys
 
 
+
 class CommandDispatcher(object):
 
 
     def __init__(self):
 
         self.commands = {}
+
+
+
+    def get_commands(self):
+
+        return self.commands
 
 
 

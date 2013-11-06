@@ -6,7 +6,9 @@ import shlex
 import Skype4Py
 
 from pekipeki import constants
+from pekipeki.constants import event
 from . import command
+from pekipeki.command import commands
 
 
 CMD_REG = re.compile(r'\$[^ ]+')
@@ -44,6 +46,7 @@ class Chat(object):
     def send_message(self, msg):
 
         self.chat.SendMessage(msg)
+
 
 
 class MessageEvent(object):
@@ -147,6 +150,9 @@ class Skype(object):
 
         self.command_dispatcher = command.CommandDispatcher()
 
+        self.command_dispatcher.register_command(event.RECEIVED, 'commands', commands.CommandsCommand())
+        self.command_dispatcher.register_command(event.RECEIVED, 'help', commands.HelpCommand())
+
 
     def on_message(self, msg, evt):
         u'''
@@ -155,7 +161,7 @@ class Skype(object):
 
         event = constants.event.from_str(evt)
 
-        e = MessageEvent(self.skype, evt, msg)
+        e = MessageEvent(self.skype, event, msg)
 
         self.proc_handlers(event, e)
         self.proc_command_handlers(event, e)
@@ -227,6 +233,11 @@ class Skype(object):
     def get_chat(self, name):
 
         return Chat(self.skype.Chat(name))
+
+
+    def get_command_dispatcher(self):
+
+        return self.command_dispatcher
 
 
 

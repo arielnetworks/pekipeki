@@ -7,24 +7,27 @@ from pekipeki.log.model import tables, session
 from pekipeki.log import functions
 
 
-nameregex = re.compile(u'([^ ]+) *\+\+')
+COUNT_REGEX = re.compile(u'([^ ]+) *(\+\+|--)')
+
 
 
 @session.with_transaction
-def increment_score(sess, name):
+def increment_score(sess, name, op):
 
-    return functions.increment_score(sess, name)
+    d = {'++': 1, '--': -1}[op]
+
+    return functions.update_score(sess, name, d)
 
 
 
-def find_name(body):
+def find_increment(body):
 
-    m = nameregex.search(body)
+    m = COUNT_REGEX.search(body)
 
     if m is None:
         return
 
-    return m.group(1).strip()
+    return m.group(1).strip(), m.group(2)
 
 
 
@@ -32,12 +35,12 @@ def score_increment(skype, evt):
 
     body = evt.get_body()
 
-    name = find_name(body)
+    name, op = find_name(body)
 
     if name is None:
         return
 
-    result = increment_score(name)
+    result = increment_score(name, op)
 
     evt.send(u'%s 現在: %s' % (name, result))
 
