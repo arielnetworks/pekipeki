@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 
+from pekipeki.constants import event
 from pekipeki.command import commands
 
 
