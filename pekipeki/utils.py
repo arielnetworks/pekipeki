@@ -142,3 +142,22 @@ def list_package_modules(pkg):
             yield mod
 
 
+
+def loop_event(sc, interval, func, *args):
+    u'''
+    sched 向けのループするイベント
+    '''
+
+    def call():
+
+        try:
+            func(*args)
+        except KeyboardInterrupt:
+            raise
+        except:
+            traceback.print_exc()
+
+        sc.enter(interval, 1, call, ())
+
+    sc.enter(0, 1, call, ())
+

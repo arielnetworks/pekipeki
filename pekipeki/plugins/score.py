@@ -25,7 +25,7 @@ def find_increment(body):
     m = COUNT_REGEX.search(body)
 
     if m is None:
-        return
+        return None, None
 
     return m.group(1).strip(), m.group(2)
 

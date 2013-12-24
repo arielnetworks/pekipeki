@@ -137,6 +137,33 @@ interval はチェック間隔(秒)
 ``$help {コマンド名}`` でヘルプが出るかも。
 
 
+進捗どうですか
+--------------
+
+一定時間ごとに「進捗どうですか!」と書き込みます。
+
+「進捗どうですか」と問いかけると「進捗ダメです!」か「進捗ありました!」と返します。
+
+
+設定
+~~~~
+こんな感じ。
+
+targets は改行区切りで ${jenkinsのジョブURL}, ${skypeの部屋名} を書いていく。
+
+interval はチェック間隔(秒)
+
+
+.. code-block:: ini
+
+   [jenkins]
+   targets =
+        #skype/chat/name
+        #skype/chat2/name
+   interval = 7200
+
+
+
 misc
 ----
 

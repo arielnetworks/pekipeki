@@ -19,22 +19,6 @@ STATUS = utils.Enum('SUCCESS', 'FAILURE', 'UNSTABLE', 'ABORTED')
 THREAD = None
 
 
-def loop_event(sc, interval, func, *args):
-
-    def call():
-
-        try:
-            func(*args)
-        except KeyboardInterrupt:
-            raise
-        except:
-            traceback.print_exc()
-
-        sc.enter(interval, 1, call, ())
-
-    sc.enter(0, 1, call, ())
-
-
 
 def get_json(url):
 
@@ -124,7 +108,7 @@ def run(skp, targets, interval):
     sc = sched.scheduler(time.time, time.sleep)
 
     for url, chat in targets:
-        loop_event(sc, interval, check, skp, url, chat, {})
+        utils.loop_event(sc, interval, check, skp, url, chat, {})
 
     sc.run()
 
