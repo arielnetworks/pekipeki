@@ -11,14 +11,14 @@ from pekipeki import utils
 RAND = random.Random()
 
 ANSWERS = [u'大吉',
-           u'吉'
-           u'吉'
-           u'中吉'
-           u'中吉'
+           u'吉',
+           u'吉',
+           u'中吉',
+           u'中吉',
            u'小吉',
            u'小吉',
-           u'中吉'
-           u'中吉'
+           u'中吉',
+           u'中吉',
            u'小吉',
            u'小吉',
            u'凶',
