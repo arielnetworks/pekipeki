@@ -159,5 +159,5 @@ def loop_event(sc, interval, func, *args):
 
         sc.enter(interval, 1, call, ())
 
-    sc.enter(0, 1, call, ())
+    sc.enter(interval, 1, call, ())
 
