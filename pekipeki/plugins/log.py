@@ -11,7 +11,6 @@ from pekipeki.log import functions
 @session.with_transaction
 def _add_log(sess, id, user, message, chat, date):
     tables.create_log(sess,
-                      id=id,
                       user=user,
                       message=message,
                       chat=chat,
@@ -90,5 +89,3 @@ def init_skype(skp, conf):
 
     skp.register_command_handler(event.RECEIVED, 'search', search)
     skp.register_command_handler(event.SENT, 'search', search)
-
-

@@ -241,7 +241,6 @@ class Skype(object):
 
 
 
-
 def init():
 
     skp = Skype()

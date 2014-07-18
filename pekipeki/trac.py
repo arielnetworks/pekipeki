@@ -7,6 +7,11 @@ import urllib2
 import urlparse
 import csv
 
+try:
+    import json
+except ImportError:
+    import simplejson as json
+
 
 
 def _get_url(root):
@@ -56,6 +61,8 @@ class Trac(object):
         self.password = password
         self.realm = realm
 
+        self.rpc = RPCMaker(self)
+
 
     def make_opener(self):
 
@@ -66,21 +73,38 @@ class Trac(object):
         return urllib2.build_opener(handler)
 
 
+    def make_url(self, url):
+
+        return '{0}/{1}'.format(self.root, url.lstrip('/'))
+
+
+    def post(self, url, data, content_type='text/plain'):
+
+        url = self.make_url(url)
+        opener = self.make_opener()
+
+        req = urllib2.Request(url, data)
+        req.add_header('Content-type', content_type)
+
+        data = opener.open(req)
+        encode = _get_content_encode(data)
+
+        body = data.read().decode(encode)
+
+        return body
+
+
     def get_ticket(self, no):
         u'''
         チケット番号から情報を取得
         '''
 
         ticket_base = self.get_ticket_url(no)
-
         ticket_url = ticket_base + '?format=csv'
 
         opener = self.make_opener()
-
         data = opener.open(ticket_url)
-
         encode = _get_content_encode(data)
-
         reader = csv.DictReader(data)
 
         value = reader.next()
@@ -99,6 +123,7 @@ class Trac(object):
         return ticket_url
 
 
+
     def get_revision_url(self, no):
         u'''
         リビジョン番号から URL 生成
@@ -108,4 +133,47 @@ class Trac(object):
 
         return revision_url
 
+
+
+class RPCMaker(object):
+
+    def __init__(self, trac):
+
+        self.trac = trac
+
+
+    def __getattr__(self, name):
+
+        return RPC(name, self.trac)
+
+
+
+class RPC(object):
+    u'''
+    Trac の rpc のためのもの
+    '''
+
+    def __init__(self, name, trac):
+
+        self.name = name
+        self.trac = trac
+
+
+    def __getattr__(self, name):
+
+        mname = self.name + '.' + name
+
+        return RPC(mname, self.trac)
+
+
+    def __call__(self, *params):
+
+        param = dict(method=self.name,
+                     params=params)
+        jsonstr = json.dumps(param)
+
+        url = 'login/jsonrpc'
+        data = self.trac.post(url, jsonstr, 'application/json')
+
+        return json.loads(data)
 

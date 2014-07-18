@@ -16,6 +16,7 @@ class Log(Base):
     '''
 
     __tablename__ = 'logs'
+    __table_args__ = {'sqlite_autoincrement': True}
 
     id = al.Column(al.Integer, primary_key=True)
     user = al.Column(al.Unicode(255), nullable=False)
@@ -141,4 +142,3 @@ def _deleter_maker(cls):
 
 create_log = _create_maker(Log)
 search_log = _search_maker(Log)
-
