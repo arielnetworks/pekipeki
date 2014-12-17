@@ -63,6 +63,29 @@ trac
 みたいな。
 
 
+trac_report
+-----------
+
+trac のレポートにチケットが追加されたら通知します
+
+設定
+~~~~
+
+interval
+    チェック間隔
+
+reports
+    チェックするレポートの番号とskypeのチャットIDと通知内容をカンマ区切りで
+
+    ``表示名,reportID,skyep部屋[,通知したいカラム1,2,...]`` みたいな感じ
+
+.. code-block:: ini
+
+   [trac_report]
+   interval = 3600
+   reports =
+        みてね!,243,#skype/chat,author,description
+
 log
 ---
 
@@ -156,7 +179,7 @@ interval はチェック間隔(秒)
 
 .. code-block:: ini
 
-   [jenkins]
+   [progress]
    targets =
         #skype/chat/name
         #skype/chat2/name
