@@ -3,9 +3,11 @@ u'''
 trac を操作する系
 '''
 
+import urllib
 import urllib2
 import urlparse
 import csv
+import StringIO
 
 try:
     import json
@@ -47,6 +49,16 @@ def _get_content_encode(resp):
 
     return 'ascii'
 
+
+
+def _remove_bom(fp):
+    u'''
+    BOM がついているらしいので消す
+    '''
+
+    data = fp.read()
+    
+    return StringIO.StringIO(data.lstrip('\xef\xbb\xbf'))
 
 
 class Trac(object):
@@ -105,12 +117,11 @@ class Trac(object):
         opener = self.make_opener()
         data = opener.open(ticket_url)
         encode = _get_content_encode(data)
-        reader = csv.DictReader(data)
+        reader = csv.DictReader(_remove_bom(data))
 
         value = reader.next()
 
         return dict((k, v.decode(encode)) for k, v in value.iteritems())
-
 
 
     def get_ticket_url(self, no):
@@ -133,6 +144,29 @@ class Trac(object):
 
         return revision_url
 
+
+    def get_report_url(self, no):
+        report_url = '{0}/report/{1}'.format(self.root, no)
+        return report_url
+
+
+    def get_report(self, no, each=100, page=1):
+        u'''
+        保存されたレポートを取得する
+        '''
+
+        report_url = self.get_report_url(no)
+
+        param = dict(format='csv', max=each, page=page)
+        geturl = report_url + '?' + urllib.urlencode(param)
+
+        opener = self.make_opener()
+        data = opener.open(geturl)
+        encode = _get_content_encode(data)
+        reader = csv.DictReader(_remove_bom(data))
+
+        return [dict((k, v.decode(encode)) for k, v in value.iteritems())
+                for value in reader]
 
 
 class RPCMaker(object):

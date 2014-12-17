@@ -165,6 +165,8 @@ def load_config(path, setting):
     コンフィグファイルを読み込む
     '''
 
+    global __global_config
+
     if path is None:
         return
 
@@ -172,5 +174,18 @@ def load_config(path, setting):
 
     config.read([path])
 
-    return Config(config, setting)
+    conf = Config(config, setting)
+    __global_config = conf
+
+    return conf
+
+
+
+def get_config(section):
+    u'''
+    グローバルの config から設定取得
+    プラグインから他のプラグインの設定を読みたい時とか
+    '''
+
+    return __global_config.get_section(section)
 

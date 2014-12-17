@@ -157,7 +157,3 @@ def init_skype(skp, conf):
     THREAD = th
 
 
-
-
-
-

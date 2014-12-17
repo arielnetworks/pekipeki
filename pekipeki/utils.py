@@ -4,6 +4,11 @@ import os
 import glob
 import traceback
 
+try:
+    import threading
+except:
+    import dummy_threading as threading
+
 
 class EnumElem(object):
     u'''
@@ -160,4 +165,17 @@ def loop_event(sc, interval, func, *args):
         sc.enter(interval, 1, call, ())
 
     sc.enter(interval, 1, call, ())
+
+
+__threads = []
+
+def spawn(func, *args):
+
+    th = threading.Thread(target=func, args=args)
+    th.setDaemon(True)
+    th.start()
+
+    __threads.append(th)
+
+    return th
 
