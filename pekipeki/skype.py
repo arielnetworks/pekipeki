@@ -37,6 +37,29 @@ class Sender(object):
 
 
 
+class Message(object):
+
+    def __init__(self, message):
+
+        self.message = message
+
+
+    def get_date(self):
+
+        return self.message.Datetime
+
+
+    def get_body(self):
+
+        return self.message.Body
+
+
+    def get_sender(self):
+
+        return Sender(self.message.Sender)
+
+
+
 class Chat(object):
 
     def __init__(self, chat):
@@ -46,6 +69,23 @@ class Chat(object):
     def send_message(self, msg):
 
         self.chat.SendMessage(msg)
+
+
+    def get_id(self):
+
+        return self.chat.Name
+
+
+    def get_title(self):
+
+        return self.chat.FriendlyName
+
+
+    def get_latest_messages(self, count=20):
+
+        msgs = self.chat.Messages[-count:]
+
+        return [Message(x) for x in msgs]
 
 
 
@@ -235,6 +275,11 @@ class Skype(object):
         return Chat(self.skype.Chat(name))
 
 
+    def list_chat(self):
+
+        return [Chat(x) for x in self.skype.Chats]
+
+
     def get_command_dispatcher(self):
 
         return self.command_dispatcher
@@ -246,4 +291,3 @@ def init():
     skp = Skype()
 
     return skp
-

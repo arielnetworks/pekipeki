@@ -1,0 +1,29 @@
+<html>
+  <head>
+<title>{{ title }}</title>
+</head>
+<body>
+<h1>{{ title }}</h1>
+
+<h2>さいごのほうのかきこみ</h2>
+<dl>
+  {% for message in messages %}
+    <dt>
+      <span class="sender">{{ message.get_sender().get_fullname() }}</span>
+      <span class="time">{{ message.get_date().strftime('%Y/%m/%d %H:%M:%S') }}</span>
+    </dt>
+    <dd>{{ message.get_body() }}</dd>
+  {% endfor %}
+</dl>
+
+<form method="POST" acition="{{ id }}">
+  <dl>
+    <dt>めっせーじ</dt>
+    <dd><textarea name="message"></textarea></dd>
+  </dl>
+
+  <input type="submit" name="submit" />
+</form>
+
+</body>
+</html>

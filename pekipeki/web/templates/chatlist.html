@@ -1,0 +1,12 @@
+<html>
+  <head>
+<title>へやいちらん</title>
+</head>
+<body>
+  <ul>
+    {% for item in chatlist %}
+    <li><a href="{{ item.id|urlencode }}">{{ item.title }}</a></li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

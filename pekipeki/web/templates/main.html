@@ -1,0 +1,15 @@
+<html>
+  <head>
+<title>てすと</title>
+</head>
+<body>
+<h1>てすとちゅうにできること</h1>
+
+<ul>
+  {% for link in links %}
+  <li><a href="/{{ link[0] }}/">{{ link[1] }}</a></li>
+  {% endfor %}
+</ul>
+
+</body>
+</html>

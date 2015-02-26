@@ -12,9 +12,12 @@ setuptools.setup(
     install_requires=[
         'Skype4Py',
         'lxml',
-        'tweepy',
         'sqlalchemy',
         'PyMySQL',
+        'Werkzeug',
+        'WebOb',
+        'WebDispatch',
+        'Jinja2',
         ],
     author=pkg.__author__,
     license=pkg.__license__,
@@ -31,4 +34,3 @@ Programming Language :: Python :: 2.7
 Topic :: Software Development :: Libraries :: Python Modules
 Topic :: Utilities
 '''.strip().splitlines())
-
