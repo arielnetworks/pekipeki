@@ -109,7 +109,7 @@ def main():
     メイン
     '''
     from . import config
-    from pekipeki import skype
+    from pekipeki import services
 
     import socket
     socket.setdefaulttimeout(10)
@@ -125,7 +125,7 @@ def main():
 
     conf.verify()
 
-    skp = skype.init()
+    skp = services.init()
 
     init_skype(skp, conf)
 
@@ -133,5 +133,3 @@ def main():
 
     while 1:
         time.sleep(100)
-
-

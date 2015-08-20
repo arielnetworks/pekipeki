@@ -7,14 +7,15 @@ import Skype4Py
 
 from pekipeki import constants
 from pekipeki.constants import event
-from . import command
+from pekipeki import command
 from pekipeki.command import commands
+from pekipeki import interfaces
 
 
 CMD_REG = re.compile(r'\$[^ ]+')
 
 
-class Sender(object):
+class Sender(interfaces.User):
 
     def __init__(self, sender):
 
@@ -37,7 +38,7 @@ class Sender(object):
 
 
 
-class Message(object):
+class Message(interfaces.Message):
 
     def __init__(self, message):
 
@@ -60,7 +61,7 @@ class Message(object):
 
 
 
-class Chat(object):
+class Chat(interfaces.Chat):
 
     def __init__(self, chat):
         self.chat = chat
@@ -89,7 +90,7 @@ class Chat(object):
 
 
 
-class MessageEvent(object):
+class MessageEvent(interfaces.MessageEvent):
     u'''
     Skype4Py のイベントオブジェクトが使いにくいので使いやすいように
     '''
@@ -173,7 +174,7 @@ class MessageEvent(object):
 
 
 
-class Skype(object):
+class Skype(interfaces.Service):
     u'''
     Skype 用のインタフェイス
     '''
@@ -283,6 +284,14 @@ class Skype(object):
     def get_command_dispatcher(self):
 
         return self.command_dispatcher
+
+
+    def get_type(self):
+        u'''
+        サービスタイプを文字列で返す
+        '''
+
+        return 'skype'
 
 
 

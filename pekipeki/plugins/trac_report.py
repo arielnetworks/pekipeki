@@ -72,7 +72,7 @@ def push_report(skp, tr, setting, report):
     value = fp.getvalue()
     room = setting.get_skype_room()
 
-    skp.get_chat(room).send_message(value)    
+    skp.get_chat(room).send_message(value)
 
 
 
@@ -91,7 +91,7 @@ def check_report(skp, tr, setting, context):
             continue
 
         push_report(skp, tr, setting, report)
-        
+
     set_previous_reports(context, reports)
 
 
@@ -114,7 +114,7 @@ def parse_reports(reports):
 
 
 def init_config(conf_addr):
-    
+
     keys = ['reports', 'interval']
     conf_addr(keys, {})
 
@@ -137,4 +137,3 @@ def init_skype(skp, conf):
     reports = parse_reports(conf.get('reports'))
 
     utils.spawn(run, skp, tr, reports, interval)
-    
