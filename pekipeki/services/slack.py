@@ -108,6 +108,8 @@ class Slack(interfaces.Service):
         :return: [Chat]
         '''
 
+        return []
+
 
 def init():
 
