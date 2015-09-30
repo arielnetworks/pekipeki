@@ -3,6 +3,7 @@ u'''
 slack 用の何か
 '''
 
+import urllib
 import urllib2
 import json
 
@@ -29,8 +30,9 @@ class IncomingWebhook(interfaces.Chat):
         '''
 
         payload = json.dumps(dict(text=msg))
-
-        urllib2.urlopen(self.hook_url, payload)
+        data = urllib.urlencode(dict(payload=payload))
+        req = urllib2.Request(self.hook_url, data)
+        urllib2.urlopen(req)
 
 
     def get_id(self):
