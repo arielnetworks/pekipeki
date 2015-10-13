@@ -50,7 +50,12 @@ def make_changeset_description(changesets):
 
     result = []
 
-    for item in changesets['items']:
+    items = changesets['items']
+
+    if len(changesets['items']) > 10:
+        items = changesets['items'][:10]
+
+    for item in items:
         author = item['user']
         revision = item['commitId']
         message = item['msg']
@@ -61,6 +66,11 @@ Author: %s
 Description:
 %s
 ''' % (revision, author, message))
+
+    if len(changesets['items']) > 10:
+        result.append(u'''
+省略されました・・全てを読むにはここを押してください
+''')
 
     return u'\n'.join(result)
 
@@ -155,5 +165,3 @@ def init_skype(skp, conf):
     th.setDaemon(True)
     th.start()
     THREAD = th
-
-
