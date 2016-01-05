@@ -113,6 +113,6 @@ class Slack(interfaces.Service):
         return []
 
 
-def init():
+def init(conf):
 
     return Slack()

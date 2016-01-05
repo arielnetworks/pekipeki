@@ -78,12 +78,19 @@ class ServiceProxy(interfaces.Service):
         return reduce(lambda x, y: x + y.list_chat(), self.services, [])
 
 
-def init():
+def init(conf):
 
     from . import skype, slack
+    from pekipeki import utils
 
     proxy = ServiceProxy()
-    proxy.add_service(slack.init())
-    proxy.add_service(skype.init())
+
+    for service in [slack, skype]:
+        name = utils.get_name(service)
+        s = service.init(conf.get_section(name))
+
+        if s:
+            proxy.add_service(s)
+            print 'initialized service:', name
 
     return proxy

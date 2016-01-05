@@ -8,6 +8,7 @@ __license__ = 'LGPL'
 
 import sys
 import time
+import itertools
 
 
 
@@ -35,6 +36,17 @@ def load_plugins():
 
 
 
+def load_services():
+    u'''
+    プラグインロード
+    '''
+
+    from pekipeki import services, utils
+
+    return utils.list_package_modules(services)
+
+
+
 def init_plugins():
     u'''
     プラグイン初期化
@@ -47,38 +59,33 @@ def init_plugins():
 
 
 
-def get_name(mod):
-
-    return mod.__name__.split('.')[-1]
-
-
-
 def init_config():
     u'''
     コンフィグのセクション情報を追加する
     '''
 
-    from . import config
+    from . import config, utils
     conf = config.ConfigSetting()
 
-    for mod in load_plugins():
+    targets = itertools.chain(load_services(), load_plugins())
+
+    for mod in targets:
 
         def conf_addr(keys, defaults):
-            conf.add_section(get_name(mod), keys, defaults)
+            conf.add_section(utils.get_name(mod), keys, defaults)
 
         if hasattr(mod, 'init_config'):
 
             mod.init_config(conf_addr)
 
-        if not conf.has_section(get_name(mod)):
+        if not conf.has_section(utils.get_name(mod)):
             conf_addr([], {})
-
 
     return conf
 
 
 
-def init_skype(skp, conf):
+def init_handlers(skp, conf):
     u'''
     ハンドラを登録する
     '''
@@ -87,14 +94,18 @@ def init_skype(skp, conf):
 
     for mod in utils.list_package_modules(plugins):
 
-        if not hasattr(mod, 'init_skype'):
-            sys.stderr.write('skip {0}'.format(mod.__name__))
+        if not hasattr(mod, 'init_skype') and not hasattr(mod, 'init_handler'):
+            sys.stderr.write('skip {0}\n'.format(mod.__name__))
             continue
 
-        sec = conf.get_section(get_name(mod))
+        sec = conf.get_section(utils.get_name(mod))
 
         try:
-            mod.init_skype(skp, sec)
+            if hasattr(mod, 'init_skype'):
+                mod.init_skype(skp, sec)
+            elif hasattr(mod, 'init_handler'):
+                mod.init_handler(skp, sec)
+
             print 'register handler plugin:', mod.__name__
         except KeyboardInterrupt:
             raise
@@ -125,11 +136,9 @@ def main():
 
     conf.verify()
 
-    skp = services.init()
+    skp = services.init(conf)
 
-    init_skype(skp, conf)
-
-    print 'start skyep bot'
+    init_handlers(skp, conf)
 
     while 1:
         time.sleep(100)

@@ -294,9 +294,13 @@ class Skype(interfaces.Service):
         return 'skype'
 
 
+def init_config(conf_addr):
 
-def init():
+    keys = ['enabled']
+    conf_addr(keys, dict(enabled='false'))
 
-    skp = Skype()
 
-    return skp
+def init(conf):
+
+    if conf.get_int('enabled') != 0:
+        return Skype()

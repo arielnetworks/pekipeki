@@ -10,6 +10,11 @@ except:
     import dummy_threading as threading
 
 
+def get_name(mod):
+
+    return mod.__name__.split('.')[-1]
+
+
 class EnumElem(object):
     u'''
     列挙体の要素
@@ -178,4 +183,3 @@ def spawn(func, *args):
     __threads.append(th)
 
     return th
-
